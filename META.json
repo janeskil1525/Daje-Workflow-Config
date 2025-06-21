@@ -1,5 +1,5 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Loads the JSON based configs and put them in a hash",
    "author" : [
       "janeskil1525 <janeskil1525@gmail.com>"
    ],
@@ -42,7 +42,9 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008001"
+            "Daje::Config" : "0",
+            "Mojo::Base" : "0",
+            "perl" : "v5.40.0"
          }
       },
       "test" : {
@@ -52,6 +54,17 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/janeskil1525/Daje-Workflow-Config/issues"
+      },
+      "homepage" : "https://github.com/janeskil1525/Daje-Workflow-Config",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/janeskil1525/Daje-Workflow-Config.git",
+         "web" : "https://github.com/janeskil1525/Daje-Workflow-Config"
+      }
+   },
    "version" : "0.01",
    "x_serialization_backend" : "JSON::PP version 4.16",
    "x_static_install" : 1

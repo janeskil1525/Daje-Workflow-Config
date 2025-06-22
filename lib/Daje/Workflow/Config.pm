@@ -47,6 +47,7 @@ use Mojo::Base -base;
 our $VERSION = "0.02";
 
 use Daje::Config;
+use Mojo::File;
 
 has 'path' => "";
 has 'config';
@@ -58,8 +59,9 @@ sub load($self, $filename) {
         my $config = Daje::Config->new(
             path => $self->path,
         )->load($filename);
-
-        $self->config($config);
+        my $path = Mojo::File->new($self->path . $filename);
+        my $tag = substr($path->basename(), 0, index($path->basename(), '.json'));
+        $self->config($config->{$tag});
     } catch($e) {
         $self->error($e);
     };
@@ -70,7 +72,7 @@ sub load($self, $filename) {
 sub param($self, $parameter) {
     my $result = "";
 
-    if (index($parameter,'.') > 0) {
+    if (index($parameter,'.') == -1) {
         try {
             $result = $self->config->{$parameter};
         }
@@ -79,10 +81,10 @@ sub param($self, $parameter) {
         };
     } else {
         try {
-            while (index($parameter,'.')) {
+            while (index($parameter,'.') > -1) {
                 my $key = substr($parameter, 0, index($parameter, '.'));
                 $result = $self->config->{$key};
-                $parameter = substr($parameter, rindex($parameter, '.'));
+                $parameter = substr($parameter, rindex($parameter, '.') + 1);
             }
             $result = $result->{$parameter};
         } catch($e) {

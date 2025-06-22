@@ -44,6 +44,7 @@
          "requires" : {
             "Daje::Config" : "0",
             "Mojo::Base" : "0",
+            "Mojo::File" : "0",
             "perl" : "v5.40.0"
          }
       },

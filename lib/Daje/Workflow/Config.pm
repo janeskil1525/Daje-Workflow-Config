@@ -17,6 +17,12 @@ use Mojo::Base -base;
 #       path => "path",
 #    )->load($filename);
 #
+#    my $parameter = "key";
+#
+#    my $value = $config->param($parameter);
+#
+#    my $parameter = "key1.key2";
+#
 #    my $value = $config->param($parameter);
 #
 # DESCRIPTION
@@ -38,12 +44,12 @@ use Mojo::Base -base;
 # janeskil1525 E<lt>janeskil1525@gmail.comE<gt>
 #
 
-our $VERSION = "0.01";
+our $VERSION = "0.02";
 
 use Daje::Config;
 
 has 'path' => "";
-has 'config' => {};
+has 'config';
 has 'error' => '';
 
 sub load($self, $filename) {
@@ -64,11 +70,25 @@ sub load($self, $filename) {
 sub param($self, $parameter) {
     my $result = "";
 
-    try {
-        $result = $self->config->{$parameter};
-    } catch ($e) {
-        $self->error($e);
-    };
+    if (index($parameter,'.') > 0) {
+        try {
+            $result = $self->config->{$parameter};
+        }
+        catch ($e) {
+            $self->error($e);
+        };
+    } else {
+        try {
+            while (index($parameter,'.')) {
+                my $key = substr($parameter, 0, index($parameter, '.'));
+                $result = $self->config->{$key};
+                $parameter = substr($parameter, rindex($parameter, '.'));
+            }
+            $result = $result->{$parameter};
+        } catch($e) {
+            $self->error($e);
+        }
+    }
 
     return $result;
 }
@@ -76,6 +96,7 @@ sub param($self, $parameter) {
 
 1;
 __END__
+
 
 
 
@@ -98,6 +119,12 @@ Daje::Workflow::Config - Loads the JSON based configs and put them in a hash
       path => "path",
    )->load($filename);
 
+   my $parameter = "key";
+
+   my $value = $config->param($parameter);
+
+   my $parameter = "key1.key2";
+
    my $value = $config->param($parameter);
 
 
@@ -111,8 +138,6 @@ Daje::Config is loading workflows from JSON files in a set folder
 
 =head1 REQUIRES
 
-L<Daje::Workflow::Config> 
-
 L<Daje::Config> 
 
 L<Mojo::Base> 
@@ -121,6 +146,14 @@ L<v5.40>
 
 
 =head1 METHODS
+
+=head2 load($self,
+
+ load($self,();
+
+=head2 param($self,
+
+ param($self,();
 
 
 =head1 AUTHOR

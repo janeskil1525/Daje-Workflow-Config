@@ -1,6 +1,6 @@
 Revision history for Perl extension Daje-Workflow-Config
 
 {{$NEXT}}
-
+    - Added dor (.) notation to reach deeper key's
     - original version
 
